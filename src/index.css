@@ -1,0 +1,318 @@
+/* =================================================================
+   Design System Baseline (Minimalist-Futurist)
+   ================================================================= */
+
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --accent-oklch: oklch(60.39% 0.23045 259.4745); /* Core glowing blue/purple dot color */
+  --accent-light: rgba(100, 116, 139, 0.1);
+  --zinc-100: #f4f4f5;
+  --zinc-200: #e4e4e7;
+  --zinc-300: #d4d4d8;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  --zinc-800: #27272a;
+  --zinc-900: #18181b;
+  --terminal-green: #22c55e;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-transform: lowercase; /* Universal aesthetic constraint */
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* =================================================================
+   Header Layout
+   ================================================================= */
+
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-b: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.header-container {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--foreground);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.logo:hover {
+  color: var(--zinc-500);
+}
+
+.spacer {
+  width: 100%;
+  height: 96px;
+  pointer-events: none;
+}
+
+/* =================================================================
+   Main Content Layout
+   ================================================================= */
+
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 64px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-section {
+  padding-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.intro-text {
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+
+.intro-text .muted {
+  color: var(--zinc-400);
+  margin-top: 4px;
+  display: block;
+}
+
+/* =================================================================
+   Memory Game Grid & Cards (3D Flips)
+   ================================================================= */
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.game-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--zinc-400);
+  border-b: 1px solid var(--zinc-100);
+  padding-bottom: 12px;
+}
+
+.reset-button {
+  background: none;
+  border: none;
+  color: var(--zinc-400);
+  cursor: pointer;
+  text-transform: lowercase;
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.reset-button:hover {
+  color: var(--foreground);
+}
+
+.grid-board {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  width: 100%;
+  max-width: 520px;
+  margin: 16px auto;
+  perspective: 1000px; /* Essential for 3D flip depth */
+}
+
+/* Card 3D Wrapper */
+.card-wrapper {
+  aspect-ratio: 1/1;
+  cursor: pointer;
+  position: relative;
+}
+
+/* The card container that rotates */
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+  border-radius: 6px;
+}
+
+/* Trigger flips */
+.card-wrapper.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+/* Card Back Design */
+.card-back {
+  background-color: var(--zinc-900);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: transform 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-wrapper:not(.flipped):hover .card-back {
+  transform: scale(1.03);
+  background-color: #0c0c0e;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* The Neural Core Dot */
+.neural-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-oklch);
+  box-shadow: 0 0 10px var(--accent-oklch);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-wrapper:not(.flipped):hover .neural-dot {
+  transform: scale(1.35);
+  box-shadow: 0 0 16px var(--accent-oklch), 0 0 4px var(--accent-oklch);
+}
+
+/* Card Front Design */
+.card-front {
+  background-color: var(--zinc-100);
+  border: 1px solid var(--zinc-200);
+  transform: rotateY(180deg); /* Initial rotation to hide front */
+  color: var(--zinc-800);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Glowing Success State for Matched Cards */
+.card-wrapper.matched .card-front {
+  background-color: rgba(34, 197, 94, 0.05);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: var(--terminal-green);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+}
+
+.card-icon {
+  width: 28px;
+  height: 28px;
+  stroke-width: 1.75px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+
+.card-wrapper.matched .card-icon {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+}
+
+/* =================================================================
+   Terminal Success Board Layout
+   ================================================================= */
+
+.terminal-success {
+  width: 100%;
+  max-width: 520px;
+  margin: 16px auto;
+  background-color: #09090b;
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  border-radius: 6px;
+  padding: 28px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--terminal-green);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 0 20px rgba(34, 197, 94, 0.03);
+  text-transform: none; /* Keep console code exact casing */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.terminal-line {
+  white-space: pre-wrap;
+  animation: typing 0.4s steps(40, end) forwards;
+}
+
+.terminal-action {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Custom Glowing Console Button */
+.enter-button {
+  background-color: var(--terminal-green);
+  color: #000000;
+  font-family: -apple-system, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: lowercase;
+  border: none;
+  border-radius: 9999px;
+  padding: 10px 24px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.35);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2), box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.enter-button:hover {
+  transform: translateY(-2px) scale(1.03);
+  background-color: #4ade80;
+  box-shadow: 0 0 25px rgba(34, 197, 94, 0.65), 0 0 6px rgba(34, 197, 94, 0.3);
+}
+
+.enter-button:active {
+  transform: translateY(0) scale(1);
+}
+
+/* Typing Effect for console entries */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
