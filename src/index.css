@@ -231,12 +231,32 @@ main {
   transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
-/* Glowing Success State for Matched Cards */
+/* Glowing Success State for Matched Cards & Transition Animation */
+.card-wrapper.matched {
+  animation: matchPulse 0.55s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  animation-delay: 150ms; /* Lets the second card flip face-up before pulsing */
+}
+
+@keyframes matchPulse {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.15) rotate(3deg);
+  }
+  60% {
+    transform: scale(1.08) rotate(-3deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
 .card-wrapper.matched .card-front {
-  background-color: rgba(34, 197, 94, 0.05);
-  border-color: rgba(34, 197, 94, 0.3);
+  background-color: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.5);
   color: var(--terminal-green);
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.15);
+  box-shadow: 0 0 18px rgba(34, 197, 94, 0.3);
 }
 
 .card-icon {
@@ -248,7 +268,7 @@ main {
 
 .card-wrapper.matched .card-icon {
   transform: scale(1.1);
-  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.3));
+  filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.4));
 }
 
 /* =================================================================
@@ -315,4 +335,537 @@ main {
 @keyframes typing {
   from { width: 0 }
   to { width: 100% }
+}
+
+/* =================================================================
+   Unlocked AI Agent Workspace Dashboard
+   ================================================================= */
+
+.dashboard-container {
+  width: 100%;
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(34, 197, 94, 0.2);
+  margin-bottom: 28px;
+}
+
+.dashboard-title {
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--terminal-green);
+  letter-spacing: -0.01em;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 32px;
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  
+  main {
+    max-width: 100%;
+  }
+}
+
+.agent-nodes {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.agent-node {
+  background-color: var(--zinc-100);
+  border: 1px solid var(--zinc-200);
+  border-radius: 6px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
+  position: relative;
+  text-align: left;
+}
+
+.agent-node:hover {
+  border-color: var(--zinc-400);
+  background-color: #f7f7f9;
+}
+
+.agent-node.active {
+  border-color: rgba(34, 197, 94, 0.4);
+  background-color: rgba(34, 197, 94, 0.02);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.04);
+}
+
+.agent-node-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agent-node-icon-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background-color: var(--background);
+  border: 1px solid var(--zinc-200);
+  color: var(--zinc-500);
+  transition: all 0.2s ease;
+}
+
+.agent-node.active .agent-node-icon-box {
+  color: var(--terminal-green);
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.15);
+}
+
+.agent-node-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.agent-node-description {
+  font-size: 13.5px;
+  color: var(--zinc-500);
+  margin-top: 6px;
+}
+
+.agent-terminal {
+  font-family: monospace;
+  font-size: 12px;
+  color: var(--terminal-green);
+  background-color: #0c0c0e;
+  border: 1px solid rgba(34, 197, 94, 0.15);
+  border-radius: 4px;
+  padding: 12px 16px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 180px;
+  overflow-y: auto;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.4);
+  animation: slideDown 0.25s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
+.agent-terminal-line {
+  white-space: pre-wrap;
+  opacity: 0.9;
+  letter-spacing: -0.01em;
+}
+
+.dashboard-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.profile-panel {
+  background-color: var(--background);
+  border: 1px solid var(--zinc-200);
+  border-radius: 6px;
+  padding: 20px;
+}
+
+.profile-panel h2 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--foreground);
+}
+
+.profile-panel p {
+  font-size: 13.5px;
+  color: var(--zinc-500);
+  line-height: 1.5;
+}
+
+.telemetry-panel {
+  background-color: var(--zinc-900);
+  border: 1px solid var(--zinc-800);
+  border-radius: 6px;
+  padding: 20px;
+  font-family: monospace;
+  font-size: 12.5px;
+  color: var(--zinc-400);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  text-transform: none; /* Keep console code exact casing */
+}
+
+.telemetry-header {
+  font-weight: 600;
+  color: var(--terminal-green);
+  border-bottom: 1px dashed rgba(34, 197, 94, 0.2);
+  padding-bottom: 8px;
+  margin-bottom: 4px;
+}
+
+.telemetry-metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.telemetry-metric .metric-val {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.telemetry-metric .metric-val.green {
+  color: var(--terminal-green);
+}
+
+.disconnect-button {
+  background: none;
+  border: 1px dashed var(--zinc-800);
+  color: var(--zinc-500);
+  font-family: monospace;
+  font-size: 12px;
+  border-radius: 4px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 8px;
+}
+
+.disconnect-button:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.02);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =================================================================
+   Vertical Parting Sliding Gates (The Separation Visual Effect)
+   ================================================================= */
+
+.gate-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gate-content-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1050;
+  overflow-y: auto;
+  background-color: var(--background);
+  transition: opacity 0.5s ease-out;
+  pointer-events: auto;
+}
+
+.gate-left-panel, .gate-right-panel {
+  position: fixed;
+  top: 0;
+  width: 50vw;
+  height: 100vh;
+  background-color: #0c0c0e;
+  z-index: 1001;
+  transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+  pointer-events: none;
+}
+
+.gate-left-panel {
+  left: 0;
+  border-right: 1px solid var(--accent-oklch);
+}
+
+.gate-right-panel {
+  right: 0;
+  border-left: 1px solid var(--accent-oklch);
+}
+
+/* Glowing circuit line on the parting seams */
+.gate-glow-line {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background-color: var(--accent-oklch);
+  box-shadow: 0 0 15px var(--accent-oklch), 0 0 30px var(--accent-oklch);
+}
+
+.gate-left-panel .gate-glow-line {
+  right: -1px;
+}
+
+.gate-right-panel .gate-glow-line {
+  left: -1px;
+}
+
+/* Activating the splits open states */
+.gate-wrapper.split-active .gate-content-container {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gate-wrapper.split-active .gate-left-panel {
+  transform: translateX(-100%);
+}
+
+.gate-wrapper.split-active .gate-right-panel {
+  transform: translateX(100%);
+}
+
+/* =================================================================
+   er-director-3 Embedded Styles (Responsive layout & details)
+   ================================================================= */
+
+.revealed-portfolio {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--background);
+  animation: portfolioReveal 1s ease-out forwards;
+}
+
+@keyframes portfolioReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.portfolio-main {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 0 24px 80px 24px;
+}
+
+.portfolio-hero {
+  padding-bottom: 48px;
+}
+
+.portfolio-hero p {
+  font-size: 17px;
+  line-height: 1.4;
+  letter-spacing: -0.010em;
+}
+
+.portfolio-hero .zinc-text {
+  color: var(--zinc-400);
+}
+
+.projects-divider {
+  display: flex;
+  flex-direction: column;
+}
+
+.row-item {
+  position: relative;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.row-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.row-title-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: color 0.2s ease;
+}
+
+.row-link:hover .row-title-bar {
+  color: var(--zinc-500);
+}
+
+.row-arrow {
+  color: var(--zinc-300);
+  transition: transform 0.2s ease, color 0.2s ease;
+  font-size: 14px;
+}
+
+.row-link:hover .row-arrow {
+  transform: translate(2px, -2px);
+  color: var(--zinc-500);
+}
+
+.row-desc {
+  font-size: 14.5px;
+  color: var(--zinc-400);
+  line-height: 1.5;
+  transition: color 0.2s ease;
+}
+
+.row-link:hover .row-desc {
+  color: var(--zinc-500);
+}
+
+/* Hover dynamic visual floating panels (sit perfectly to the right) */
+.row-hover-preview {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .row-hover-preview {
+    display: block;
+    position: absolute;
+    left: 340px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.95);
+    z-index: 100;
+    width: 460px;
+    aspect-ratio: 1512/982;
+    pointer-events: none;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--zinc-200);
+    background-color: var(--zinc-100);
+  }
+
+  .row-link:hover .row-hover-preview {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
+}
+
+.row-hover-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Purple indicator dot positioned directly aligned with lists */
+.row-dot {
+  position: absolute;
+  left: -24px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--accent-oklch);
+  opacity: 0;
+  transform: scale(0.5) translateX(-8px);
+  transition: all 0.2s ease-out;
+}
+
+.row-link:hover .row-dot {
+  opacity: 1;
+  transform: scale(1) translateX(0);
+}
+
+/* TIMELINE STYLES (for About Page) */
+.timeline-section {
+  margin-top: 64px;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding-top: 32px;
+}
+
+.timeline-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--zinc-400);
+  margin-bottom: 24px;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-row {
+  display: flex;
+  padding: 12px 0;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+  border-radius: 4px;
+}
+
+.timeline-row:hover {
+  background-color: #fafafa;
+}
+
+.timeline-year {
+  min-width: 100px;
+  font-weight: 500;
+  color: var(--zinc-400);
+}
+
+.timeline-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-company {
+  font-weight: 500;
+  color: var(--zinc-400);
+}
+
+.timeline-role {
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+/* Bullet Items (inside Canvas etc) */
+.bullet-item {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.bullet-dot {
+  font-weight: 600;
+  color: var(--zinc-400);
+}
+
+.bullet-text-wrapper {
+  flex: 1;
+}
+
+.bullet-title {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.bullet-desc {
+  color: var(--zinc-500);
 }
