@@ -478,7 +478,7 @@ export default function App() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isFullyOpen, setIsFullyOpen] = useState(false)
 
-  const { score, rank, description, color, rgb } = calculateScore(attempts)
+  const { score, color, rgb } = calculateScore(attempts)
   const potential = calculateScore(attempts + 1)
 
   // Initialize matching game
