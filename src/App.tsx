@@ -101,6 +101,18 @@ function PortfolioLayout({ children, onDisconnect }: { children: React.ReactNode
   )
 }
 
+function BulletItem({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="bullet-item">
+      <span className="bullet-dot">•</span>
+      <div className="bullet-text-wrapper">
+        <span className="bullet-title">{title}</span>
+        <br />
+        <span className="bullet-desc">{description}</span>
+      </div>
+    </div>
+  )
+}
 
 
 function VideoPlaceholder({ label }: { label: string }) {
@@ -112,6 +124,9 @@ function VideoPlaceholder({ label }: { label: string }) {
     </div>
   )
 }
+
+
+
 
 /* =================================================----------------
    revealed list project row (including hover placeholder images)
@@ -261,7 +276,13 @@ function Imagine() {
       <VideoPlaceholder label="imagine " />
 
       <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>imagine</h3>
-      
+
+      <BulletItem title="generate & edit" description="manually edit generated content without losing context." />
+      <BulletItem title="highlight & improve" description="reference any section to condense, expand, or refine—while maintaining control over the final result." />
+      <BulletItem title="reverse prompting" description="agent needs to adapt to you." />
+
+
+
      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
         Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
       </p>
