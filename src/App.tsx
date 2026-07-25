@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { 
-  Cpu, Brain, Bot, Sparkles, Database, Terminal, Layers, ShieldCheck, Network 
+  Cpu, Brain, Bot, Sparkles, Database, Terminal, Layers, ShieldCheck, Network, RotateCcw 
 } from 'lucide-react'
 
 import imagineImg from './imagine.png'
 import planImg from './plan.png'
-import directImg from './direct.png'
+import directImg from './direct-agents.png'
 import verifyImg from './verify.png'
 
 /* =================================================----------------
@@ -54,7 +54,7 @@ function ScrollToTop() {
    REVEALED PORTFOLIO LAYOUT (From er-director-3)
    ================================================================= */
 
-function PortfolioLayout({ children }: { children: React.ReactNode }) {
+function PortfolioLayout({ children, onDisconnect }: { children: React.ReactNode; onDisconnect: () => void }) {
   return (
     <div className="revealed-portfolio text-black font-sans selection:bg-zinc-100 selection:text-black">
       {/* Sticky Blurred Nav Header */}
@@ -63,9 +63,30 @@ function PortfolioLayout({ children }: { children: React.ReactNode }) {
           <Link to="/" className="logo">
             elizabeth reider
           </Link>
-          <Link to="/about" className="reset-button" style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px', textDecoration: 'none' }}>
-            [ about me ]
-          </Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+            <Link to="/about" className="reset-button" style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px', textDecoration: 'none' }}>
+              [ about me ]
+            </Link>
+            <button 
+              onClick={onDisconnect} 
+              className="reset-button" 
+              style={{ 
+                color: '#ef4444', 
+                borderBottom: '1px dashed rgba(239,68,68,0.25)', 
+                paddingBottom: '2px', 
+                background: 'none', 
+                border: 'none', 
+                cursor: 'pointer', 
+                display: 'flex', 
+                alignItems: 'center', 
+                gap: '4px' 
+              }}
+              title="Play memory game from scratch"
+            >
+              <RotateCcw size={13} style={{ display: 'inline-block' }} />
+              <span>[ new game ]</span>
+            </button>
+          </div>
         </div>
       </header>
 
@@ -80,18 +101,7 @@ function PortfolioLayout({ children }: { children: React.ReactNode }) {
   )
 }
 
-function BulletItem({ title, description }: { title: string; description: string }) {
-  return (
-    <div className="bullet-item">
-      <span className="bullet-dot">•</span>
-      <div className="bullet-text-wrapper">
-        <span className="bullet-title">{title}</span>
-        <br />
-        <span className="bullet-desc">{description}</span>
-      </div>
-    </div>
-  )
-}
+
 
 function VideoPlaceholder({ label }: { label: string }) {
   return (
@@ -544,7 +554,16 @@ export default function App() {
     }, 1200)
   }
 
-
+  // Disconnect, slides gates closed
+  const disconnectWorkspace = () => {
+    setIsFullyOpen(false)
+    setIsAuthorized(false)
+    // Delay slightly to let the gates mount before triggering the close slide
+    setTimeout(() => {
+      setIsSplitting(false)
+      resetGame()
+    }, 50)
+  }
 
   return (
     <>
@@ -562,7 +581,7 @@ export default function App() {
           pointerEvents: isAuthorized ? 'auto' : 'none'
         }}
       >
-        <PortfolioLayout>
+        <PortfolioLayout onDisconnect={disconnectWorkspace}>
           <Routes>
             <Route path="/" element={<PortfolioHome />} />
             <Route path="/about" element={<About />} />
@@ -657,7 +676,6 @@ export default function App() {
                     <p className="terminal-line">&gt; match verification: successful</p>
                     <p className="terminal-line">&gt; analyzing pattern linkage... completed in {attempts} {attempts === 1 ? 'attempt' : 'attempts'}</p>
                     <p className="terminal-line" style={{ color: color }}>&gt; cognitive sync accuracy: {score}% {getProgressBar(score)}</p>
-                    <p className="terminal-line" style={{ color: color }}>&gt; link security rank: [{rank}] - {description}</p>
                     
                     <p className="terminal-line">&gt; access status: <span style={{ color: color, fontWeight: 'bold' }}>granted</span></p>
                     <div className="terminal-action">
