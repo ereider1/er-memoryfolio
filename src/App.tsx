@@ -54,7 +54,7 @@ function ScrollToTop() {
    REVEALED PORTFOLIO LAYOUT (From er-director-3)
    ================================================================= */
 
-function PortfolioLayout({ children, onDisconnect }: { children: React.ReactNode; onDisconnect: () => void }) {
+function PortfolioLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="revealed-portfolio text-black font-sans selection:bg-zinc-100 selection:text-black">
       {/* Sticky Blurred Nav Header */}
@@ -63,9 +63,9 @@ function PortfolioLayout({ children, onDisconnect }: { children: React.ReactNode
           <Link to="/" className="logo">
             elizabeth reider
           </Link>
-          <button className="reset-button" onClick={onDisconnect} style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px' }}>
-            [ back home ]
-          </button>
+          <Link to="/about" className="reset-button" style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px', textDecoration: 'none' }}>
+            [ about me ]
+          </Link>
         </div>
       </header>
 
@@ -98,7 +98,7 @@ function VideoPlaceholder({ label }: { label: string }) {
     <div className="relative w-full aspect-[16/10] bg-zinc-50 border border-zinc-200 rounded-[4px] flex flex-col items-center justify-center text-zinc-400 my-8 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(240,240,240,0.5)_0%,transparent_100%)]" />
       <span className="font-sans font-medium text-[15px] tracking-wide relative z-10 text-zinc-500">{label}</span>
-      <span className="text-[11px] text-zinc-400 mt-1 relative z-10">XXXXXXX</span>
+      <span className="text-[11px] text-zinc-400 mt-1 relative z-10"> - - -</span>
     </div>
   )
 }
@@ -160,20 +160,21 @@ function PortfolioHome() {
     <div className="flex-1 flex flex-col gap-4">
       {/* Hero Intro */}
       <div className="portfolio-hero">
-        <p>
+        <div>
           <span>hello, i'm elizabeth.</span>
           <br />
-          <span className="zinc-text">i love creating spaces for ideas to grow.</span>
-        </p>
+          <p className="mt-15 zinc-text">i like creating spaces for ideas to grow.</p>
+          <p className="mt-5 zinc-text">I imagine. I direct. I verify.</p>
+           
+        </div>
       </div>
 
       {/* Process list */}
       <div className="projects-divider">
         <ProjectRow id={1} title="imagine" description="unlocking human creativity" link="/imagine" previewImage={imagineImg} />
-        <ProjectRow id={2} title="plan" description="plan plan plan" link="/plan" previewImage={planImg} />
-        <ProjectRow id={3} title="direct" description="prompting exactly what you mean" link="/direct" previewImage={directImg} />
-        <ProjectRow id={4} title="verify" description="verify results" link="/verify" previewImage={verifyImg} />
-        <ProjectRow id={5} title="about" description="about me" link="/about" />
+        <ProjectRow id={2} title="plan" description="what to pack. where are we going." link="/plan" previewImage={planImg} />
+        <ProjectRow id={3} title="direct" description="being an expert guide" link="/direct" previewImage={directImg} />
+        <ProjectRow id={4} title="verify" description="did everything work out" link="/verify" previewImage={verifyImg} />
       </div>
 
     </div>
@@ -191,22 +192,21 @@ function About() {
 
         <p className="max-w-[340px] text-zinc-800 leading-[1.6] space-y-6">
          i'm elizabeth.
-          <br /><br />
-          I like creating using my brain and AI.
-          <br /><br />
-          
+          <br />
+          <br />
 Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
 
-Since I am a self-taught web developer, I have a long curvy road of experience. I started with a bachelor of Fine Arts (painting- no Vango here). Learned fast paced print production graphic design at the Santa Barbara Independent, then animation at Venables Bell, then web design and development at CrowdStrike. 
+Since I am a self-taught web developer, I have had a long curvy road of experience. I started with a bachelor of Fine Arts (painting- no Vango here). Learned fast paced print production graphic design at the Santa Barbara Independent, then animation at Venables Bell, then web design and development at CrowdStrike. 
 
 Of course there were many fun side projects in between (where I learned to build and break things)
 
 Now I use AI to automate tasks and create and explore
-
-When I’m not at my computer, I am on the beach with my dogs, or pretending I have a green thumb.
+<br />
+<br />
+When I'm not at my computer, I am on the beach with my dogs, or pretending I have a green thumb.
 
           <br /><br />
-          I imagine. I define. I direct. I verify.
+        contact me
           <br />
         </p>
 
@@ -221,8 +221,11 @@ When I’m not at my computer, I am on the beach with my dogs, or pretending I h
         <h2 className="timeline-title">experience</h2>
         <div className="timeline-list">
           {[
-            { year: '2026', company: 'freelance', role: 'AI Director', link: 'https://elizabethreider.com' },
-            { year: '2015', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
+            { year: 'now', company: 'ereider', role: 'Freelance', link: 'https://elizabethreider.com' },
+            { year: '2019', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
+            { year: '2015', company: 'Venables Bell & Partners', role: 'Digital Animation & Production', link: 'https://www.venablesbell.com' },
+            { year: '2012', company: 'Los Angeles Business Journal', role: 'Print Design & Production', link: 'https://www.crowdstrike.com' },
+            { year: '2010', company: 'Santa Barbara Independent', role: 'Ad Design & Production', link: 'https://www.independent.com' },
             
           ].map((exp, idx) => (
             <a key={idx} href={exp.link} target="_blank" rel="noopener noreferrer" className="timeline-row">
@@ -246,20 +249,15 @@ function Imagine() {
   return (
     <div className="w-full">
       <VideoPlaceholder label="imagine " />
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        imagine and planning
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        drafting and refining until the goal is clear.
-      </p>
 
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>why it works</h3>
-      <BulletItem title="generate & edit" description="manually edit generated content without losing context." />
-      <BulletItem title="highlight & improve" description="reference any section to condense, expand, or refine—while maintaining control over the final result." />
-      <BulletItem title="reverse prompting" description="agent needs to adapt to you." />
+      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>imagine</h3>
+      
+     <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
+        Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
+      </p>
 
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '24px 0 32px 0' }}>
-        by integrating llms with manual editing, canvas reduced both prompts and completion time by 50%, shifting user focus from process to quality.
+        these tools help speed up the creation stage and therefore collaboration starts at the beginning.
       </p>
 
       
@@ -269,9 +267,6 @@ function Imagine() {
         </a>
       </div>
 
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        canvas is one step toward more intuitive ai interfaces. future human-ai collaboration will go further, anticipating intent, adapting to context in real time, and integrating ai into familiar interaction patterns.
-      </p>
     </div>
   )
 }
@@ -549,16 +544,7 @@ export default function App() {
     }, 1200)
   }
 
-  // Disconnect, slides gates closed
-  const disconnectWorkspace = () => {
-    setIsFullyOpen(false)
-    setIsAuthorized(false)
-    // Delay slightly to let the gates mount before triggering the close slide
-    setTimeout(() => {
-      setIsSplitting(false)
-      resetGame()
-    }, 50)
-  }
+
 
   return (
     <>
@@ -576,7 +562,7 @@ export default function App() {
           pointerEvents: isAuthorized ? 'auto' : 'none'
         }}
       >
-        <PortfolioLayout onDisconnect={disconnectWorkspace}>
+        <PortfolioLayout>
           <Routes>
             <Route path="/" element={<PortfolioHome />} />
             <Route path="/about" element={<About />} />
@@ -611,6 +597,24 @@ export default function App() {
                 <span className="logo" style={{ cursor: 'default' }}>
                   elizabeth reider
                 </span>
+                <Link 
+                  to="/about" 
+                  className="reset-button" 
+                  onClick={(e) => {
+                    e.preventDefault()
+                    console.log(`[Header Nav] "about" clicked from gateway screen. Starting split gates...`)
+                    setIsSplitting(true)
+                    setTimeout(() => {
+                      console.log(`[Header Nav] Doors split complete! Revealing "about" workspace...`)
+                      navigate('/about')
+                      setIsAuthorized(true)
+                      setIsFullyOpen(true)
+                    }, 1200)
+                  }}
+                  style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px', textDecoration: 'none' }}
+                >
+                  [ about ]
+                </Link>
               </div>
             </header>
 
@@ -622,9 +626,7 @@ export default function App() {
                 <p className="intro-text">
                   <span>hello, i'm elizabeth.</span>
                   <span className="muted">
-                    I love creating beautiful, useable experiences. 
-                    <br />
-                    Memory. Skills. Context.
+                    I like creating spaces for ideas to grow.
                   </span>
                 </p>
               </section>
