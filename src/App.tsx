@@ -196,9 +196,9 @@ function PortfolioHome() {
 
       {/* Process list */}
       <div className="projects-divider">
-        <ProjectRow id={1} title="imagine" description="unlocking human creativity" link="/imagine" previewImage={imagineImg} />
-        <ProjectRow id={2} title="plan" description="what to pack. where are we going." link="/plan" previewImage={planImg} />
-        <ProjectRow id={3} title="direct" description="being an expert guide" link="/direct" previewImage={directImg} />
+        <ProjectRow id={1} title="imagine" description="where are we going?" link="/imagine" previewImage={imagineImg} />
+        <ProjectRow id={2} title="plan" description="what to pack?" link="/plan" previewImage={planImg} />
+        <ProjectRow id={3} title="direct" description="bring an expert guide" link="/direct" previewImage={directImg} />
         <ProjectRow id={4} title="verify" description="did everything work out" link="/verify" previewImage={verifyImg} />
       </div>
 
@@ -401,46 +401,44 @@ function Verify() {
    Scoring and Progress-Bar Helpers
    ================================================================= */
 
-function calculateScore(attempts: number) {
-  const count = attempts || 1
-  let score = 100
+function calculateScore(attempts: number, seconds: number) {
+  const flips = attempts * 2
+  // Score = 100 - (Flips - 4) * 10 - (Seconds * 0.5)
+  // Capped between 10 and 100
+  const rawScore = 100 - (flips - 4) * 10 - seconds * 0.5
+  const score = Math.max(10, Math.min(100, Math.round(rawScore)))
+
   let rank = '*'
   let description = 'you got lucky'
   let color = '#22c55e' // terminal green
   let rgb = '34, 197, 94'
 
-  if (count === 1) {
-    score = 100
+  if (score >= 90) {
     rank = '*'
     description = 'you got lucky'
     color = '#22c55e'
     rgb = '34, 197, 94'
-  } else if (count === 2) {
-    score = 85
+  } else if (score >= 75) {
     rank = 'A'
     description = 'exceptional neural clarity'
     color = '#3b82f6' // blue
     rgb = '59, 130, 246'
-  } else if (count === 3) {
-    score = 70
+  } else if (score >= 60) {
     rank = 'B'
     description = 'stable cognitive alignment'
     color = '#a855f7' // purple
     rgb = '168, 85, 247'
-  } else if (count === 4) {
-    score = 55
+  } else if (score >= 45) {
     rank = 'C'
     description = 'standard link authorized'
     color = '#eab308' // yellow
     rgb = '234, 179, 8'
-  } else if (count === 5) {
-    score = 40
+  } else if (score >= 30) {
     rank = 'D'
     description = 're-routed memory backup'
     color = '#f97316' // orange
     rgb = '249, 115, 22'
   } else {
-    score = Math.max(10, 35 - (count - 6) * 5)
     rank = 'F'
     description = 'degraded / high-noise link'
     color = '#ef4444' // red
@@ -478,8 +476,27 @@ export default function App() {
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isFullyOpen, setIsFullyOpen] = useState(false)
 
-  const { score, color, rgb } = calculateScore(attempts)
-  const potential = calculateScore(attempts + 1)
+  // Timer & Cognitive testing raw metrics states
+  const [seconds, setSeconds] = useState(0)
+  const [timerActive, setTimerActive] = useState(false)
+  const [revealedCardIds, setRevealedCardIds] = useState<number[]>([])
+  const [repeatedUnnecessary, setRepeatedUnnecessary] = useState(false)
+
+  // Timer runner
+  useEffect(() => {
+    let interval: any = null
+    if (timerActive) {
+      interval = setInterval(() => {
+        setSeconds(prev => prev + 1)
+      }, 1000)
+    }
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [timerActive])
+
+  const { score, rank, description, color, rgb } = calculateScore(attempts, seconds)
+  const potential = calculateScore(attempts + 1, seconds)
 
   // Initialize matching game
   const resetGame = () => {
@@ -499,6 +516,10 @@ export default function App() {
     setIsLocked(false)
     setAttempts(0)
     setIsCompleted(false)
+    setSeconds(0)
+    setTimerActive(false)
+    setRevealedCardIds([])
+    setRepeatedUnnecessary(false)
   }
 
   // Pre-load gateway game
@@ -512,6 +533,14 @@ export default function App() {
 
     console.log(`[Memory Game] Card Clicked: ID ${clickedCard.id} (${clickedCard.iconName})`);
 
+    // Start timer on first card click
+    if (!timerActive && !isCompleted) {
+      setTimerActive(true)
+    }
+
+    // Add clicked card to revealed list (after we read if it was already revealed!)
+    const wasAlreadyRevealed = revealedCardIds.includes(clickedCard.id)
+
     const updatedCards = cards.map(c => 
       c.id === clickedCard.id ? { ...c, isFlipped: true } : c
     )
@@ -524,6 +553,8 @@ export default function App() {
       setAttempts(prev => prev + 1)
       setIsLocked(true)
 
+      const firstWasAlreadyRevealed = revealedCardIds.includes(firstCard.id)
+
       if (firstCard.iconName === clickedCard.iconName) {
         console.log(`[Memory Game] MATCH DETECTED: ${firstCard.iconName} === ${clickedCard.iconName}`);
         // MATCH
@@ -531,9 +562,19 @@ export default function App() {
           c.iconName === firstCard.iconName ? { ...c, isMatched: true, isFlipped: true } : c
         )
         setCards(matchedCards)
+        
+        // Add both to revealed list
+        setRevealedCardIds(prev => {
+          const next = [...prev]
+          if (!next.includes(firstCard.id)) next.push(firstCard.id)
+          if (!next.includes(clickedCard.id)) next.push(clickedCard.id)
+          return next
+        })
+
         setFirstCard(null)
         setSecondCard(null)
         setIsLocked(false)
+        setTimerActive(false) // Stop timer on match!
 
         // Win instantly on the very first match!
         const matchFound = matchedCards.some(c => c.isMatched)
@@ -546,7 +587,21 @@ export default function App() {
         }
       } else {
         console.log(`[Memory Game] MISMATCH DETECTED: ${firstCard.iconName} !== ${clickedCard.iconName}`);
-        // MISMATCH
+        
+        // If they mismatched, and either card was already revealed before this turn, record repeated flip!
+        if (firstWasAlreadyRevealed || wasAlreadyRevealed) {
+          setRepeatedUnnecessary(true)
+        }
+
+        // Add both to revealed list
+        setRevealedCardIds(prev => {
+          const next = [...prev]
+          if (!next.includes(firstCard.id)) next.push(firstCard.id)
+          if (!next.includes(clickedCard.id)) next.push(clickedCard.id)
+          return next
+        })
+
+        // MISMATCH reset
         setTimeout(() => {
           const resetCards = updatedCards.map(c => 
             c.id === firstCard.id || c.id === clickedCard.id 
@@ -674,7 +729,7 @@ export default function App() {
               {/* Memory Matching Game board */}
               <section className="game-container">
                 <div className="game-meta">
-                  <span>{attempts} {attempts === 1 ? 'attempt' : 'attempts'}</span>
+                  <span>{attempts} {attempts === 1 ? 'attempt' : 'attempts'}{seconds > 0 ? ` • ${seconds}s` : ''}</span>
                   {!isCompleted && (
                     <span className="zinc-text" style={{ fontSize: '13px' }}>
                       potential link: <span style={{ color: potential.color, fontWeight: 'bold' }}>{potential.rank}</span> ({potential.score} pts)
@@ -695,8 +750,17 @@ export default function App() {
                     }}
                   >
                     <p className="terminal-line">&gt; match verification: successful</p>
-                    <p className="terminal-line">&gt; analyzing pattern linkage... completed in {attempts} {attempts === 1 ? 'attempt' : 'attempts'}</p>
+                    <p className="terminal-line">&gt; analyzing pattern linkage... completed in {seconds} seconds ({attempts * 2} flips / {attempts} attempts)</p>
                     <p className="terminal-line" style={{ color: color }}>&gt; cognitive sync accuracy: {score}% {getProgressBar(score)}</p>
+                    <p className="terminal-line" style={{ color: color }}>&gt; link security rank: [{rank}] - {description}</p>
+
+                    <div style={{ margin: '16px 0', borderTop: '1px dashed rgba(113, 113, 122, 0.2)', paddingTop: '16px' }}>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; [ cognitive evaluation metrics ]</p>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; flips to first match: {attempts * 2}</p>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; time to first match: {seconds}s</p>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; unique cards revealed: {revealedCardIds.length} / 16</p>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; repeated unnecessary flips: {repeatedUnnecessary ? 'detected (indicating high-noise memory pathway)' : 'none (indicating optimal memory path retention)'}</p>
+                    </div>
                     
                     <p className="terminal-line">&gt; access status: <span style={{ color: color, fontWeight: 'bold' }}>granted</span></p>
                     <div className="terminal-action">
