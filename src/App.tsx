@@ -5,6 +5,7 @@ import {
 } from 'lucide-react'
 
 import imagineImg from './imagine.png'
+import planImg from './plan.png'
 import directImg from './direct.png'
 import verifyImg from './verify.png'
 
@@ -166,11 +167,13 @@ function PortfolioHome() {
         </p>
       </div>
 
-      {/* Projects list */}
+      {/* Process list */}
       <div className="projects-divider">
-        <ProjectRow id={1} title="imagine" description="unlocking human creativity" link="/canvas" previewImage={imagineImg} />
-        <ProjectRow id={2} title="direct" description="reimagining ai collaboration" link="/intents" previewImage={directImg} />
-        <ProjectRow id={3} title="verify" description="prompting exactly what you mean" link="/align" previewImage={verifyImg} />
+        <ProjectRow id={1} title="imagine" description="unlocking human creativity" link="/imagine" previewImage={imagineImg} />
+        <ProjectRow id={2} title="plan" description="plan plan plan" link="/plan" previewImage={planImg} />
+        <ProjectRow id={3} title="direct" description="prompting exactly what you mean" link="/direct" previewImage={directImg} />
+        <ProjectRow id={4} title="verify" description="verify results" link="/verify" previewImage={verifyImg} />
+        <ProjectRow id={5} title="about" description="about me" link="/about" />
       </div>
 
     </div>
@@ -180,7 +183,7 @@ function PortfolioHome() {
 // 2. About Page
 function About() {
   return (
-    <div className="w-full">
+    <div id="aboutme" className="w-full">
       <section className="flex flex-col gap-8">
         <div className="w-full max-w-[280px] aspect-[1/1.5] bg-zinc-50 border border-zinc-200 rounded-[4px] flex flex-col items-center justify-center text-zinc-400 select-none">
           <span className="text-[11px] text-zinc-400 mt-1">Hello</span>
@@ -189,11 +192,21 @@ function About() {
         <p className="max-w-[340px] text-zinc-800 leading-[1.6] space-y-6">
          i'm elizabeth.
           <br /><br />
-          i help humans and ai build and design together.
+          I like creating using my brain and AI.
           <br /><br />
-          senior web developer at Crowdstrike.
+          
+Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
+
+Since I am a self-taught web developer, I have a long curvy road of experience. I started with a bachelor of Fine Arts (painting- no Vango here). Learned fast paced print production graphic design at the Santa Barbara Independent, then animation at Venables Bell, then web design and development at CrowdStrike. 
+
+Of course there were many fun side projects in between (where I learned to build and break things)
+
+Now I use AI to automate tasks and create and explore
+
+When I’m not at my computer, I am on the beach with my dogs, or pretending I have a green thumb.
+
           <br /><br />
-          I imagine. I define. I verify.
+          I imagine. I define. I direct. I verify.
           <br />
         </p>
 
@@ -208,7 +221,7 @@ function About() {
         <h2 className="timeline-title">experience</h2>
         <div className="timeline-list">
           {[
-            { year: '2026', company: 'ereider', role: 'AI Director', link: 'https://elizabethreider.com' },
+            { year: '2026', company: 'freelance', role: 'AI Director', link: 'https://elizabethreider.com' },
             { year: '2015', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
             
           ].map((exp, idx) => (
@@ -228,8 +241,8 @@ function About() {
   )
 }
 
-// 3. Canvas Page
-function Canvas() {
+// 3. Imagine Page
+function Imagine() {
   return (
     <div className="w-full">
       <VideoPlaceholder label="imagine " />
@@ -263,7 +276,7 @@ function Canvas() {
   )
 }
 
-function Intents() {
+function Plan() {
   return (
     <div className="w-full">
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
@@ -295,7 +308,7 @@ function Intents() {
   )
 }
 
-function Align() {
+function Direct() {
   return (
     <div className="w-full">
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
@@ -317,15 +330,15 @@ function Align() {
       <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>5. know when to fine-tune</span>
 
       <div style={{ margin: '32px 0' }}>
-        <a href="https://translator.niklas.space/" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          try the prototype
+        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
+          contact me
         </a>
       </div>
     </div>
   )
 }
 
-function Futures() {
+function Verify() {
   return (
     <div className="w-full">
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
@@ -346,59 +359,75 @@ function Futures() {
       <VideoPlaceholder label="procedural audio snapshot dashboard" />
 
       <div style={{ margin: '32px 0' }}>
-        <a href="#" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          try the prototype
+        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
+          contact me
         </a>
       </div>
     </div>
   )
 }
 
-function Anticipate() {
-  return (
-    <div className="w-full">
-      <VideoPlaceholder label="anticipate research platform presentation" />
-      <div style={{ margin: '24px 0' }}>
-        <a href="https://doi.org/10.21606/drs.2024.1367" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          read the paper
-        </a>
-      </div>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        design thrives on ambiguity—the best ideas come from challenging assumptions and navigating uncertainty. llms, however, are designed to fill in gaps with existing knowledge. left unchecked, it reinforces patterns rather than expanding them.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this research explores how ai can expand, not limit, human creativity. inspired by doug engelbart's vision of augmentation over automation, it explores ai-powered tools that help designers uncover blind spots, challenge defaults, and manage complexity.
-      </p>
-    </div>
-  )
+
+
+
+
+/* =================================================----------------
+   Scoring and Progress-Bar Helpers
+   ================================================================= */
+
+function calculateScore(attempts: number) {
+  const count = attempts || 1
+  let score = 100
+  let rank = '*'
+  let description = 'you got lucky'
+  let color = '#22c55e' // terminal green
+  let rgb = '34, 197, 94'
+
+  if (count === 1) {
+    score = 100
+    rank = '*'
+    description = 'you got lucky'
+    color = '#22c55e'
+    rgb = '34, 197, 94'
+  } else if (count === 2) {
+    score = 85
+    rank = 'A'
+    description = 'exceptional neural clarity'
+    color = '#3b82f6' // blue
+    rgb = '59, 130, 246'
+  } else if (count === 3) {
+    score = 70
+    rank = 'B'
+    description = 'stable cognitive alignment'
+    color = '#a855f7' // purple
+    rgb = '168, 85, 247'
+  } else if (count === 4) {
+    score = 55
+    rank = 'C'
+    description = 'standard link authorized'
+    color = '#eab308' // yellow
+    rgb = '234, 179, 8'
+  } else if (count === 5) {
+    score = 40
+    rank = 'D'
+    description = 're-routed memory backup'
+    color = '#f97316' // orange
+    rgb = '249, 115, 22'
+  } else {
+    score = Math.max(10, 35 - (count - 6) * 5)
+    rank = 'F'
+    description = 'degraded / high-noise link'
+    color = '#ef4444' // red
+    rgb = '239, 68, 68'
+  }
+
+  return { score, rank, description, color, rgb }
 }
 
-function Research() {
-  return (
-    <div className="w-full">
-      <VideoPlaceholder label="mit media lab research collaboration showcase" />
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        misinformation often hides in the details—shaping public perception through subtle framing rather than outright falsehoods.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this research, conducted together with the mit media lab, uncovers patterns in misleading information and explores how interface design can highlight unspoken assumptions, making it easier for users to spot distortions.
-      </p>
-    </div>
-  )
-}
-
-function Interfaces() {
-  return (
-    <div className="w-full">
-      <h3 className="bullet-title" style={{ fontSize: '23px', margin: '32px 0 16px 0' }}>the hidden costs of instruction</h3>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        ai is often framed as an autonomous agent that reduces work, but in reality, it shifts the burden onto users. rather than performing tasks independently, llms rely on users to define goals, provide context, set constraints, and review results-turning what should be automation into an ongoing, labor-intensive process.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        conversational interfaces like chat compound this. they are often criticized for being as opaque as command line interfaces (clis) from the 60s, but they are actually worse. in clis and guis, every input has a predictable result. llms can't offer that. you type a prompt, hit enter, and hope the model understands it. if it doesn't, you have to rephrase, clarify, and iterate—slowly.
-      </p>
-    </div>
-  )
+function getProgressBar(score: number) {
+  const totalBlocks = 10
+  const filledBlocks = Math.round((score / 100) * totalBlocks)
+  return '■'.repeat(filledBlocks) + '□'.repeat(totalBlocks - filledBlocks)
 }
 
 /* =================================================----------------
@@ -422,6 +451,9 @@ export default function App() {
   const [isSplitting, setIsSplitting] = useState(false)
   const [isAuthorized, setIsAuthorized] = useState(false)
   const [isFullyOpen, setIsFullyOpen] = useState(false)
+
+  const { score, rank, description, color, rgb } = calculateScore(attempts)
+  const potential = calculateScore(attempts + 1)
 
   // Initialize matching game
   const resetGame = () => {
@@ -548,13 +580,10 @@ export default function App() {
           <Routes>
             <Route path="/" element={<PortfolioHome />} />
             <Route path="/about" element={<About />} />
-            <Route path="/canvas" element={<Canvas />} />
-            <Route path="/intents" element={<Intents />} />
-            <Route path="/align" element={<Align />} />
-            <Route path="/futures" element={<Futures />} />
-            <Route path="/anticipate" element={<Anticipate />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/interfaces" element={<Interfaces />} />
+            <Route path="/imagine" element={<Imagine />} />
+            <Route path="/plan" element={<Plan />} />
+            <Route path="/direct" element={<Direct />} />
+            <Route path="/verify" element={<Verify />} />
           </Routes>
         </PortfolioLayout>
       </div>
@@ -593,8 +622,9 @@ export default function App() {
                 <p className="intro-text">
                   <span>hello, i'm elizabeth.</span>
                   <span className="muted">
-                    i engineer autonomous ai agent expert systems.<br />
-                    match the cognitive links below to verify identity and unlock my workspace.
+                    I love creating beautiful, useable experiences. 
+                    <br />
+                    Memory. Skills. Context.
                   </span>
                 </p>
               </section>
@@ -602,24 +632,43 @@ export default function App() {
               {/* Memory Matching Game board */}
               <section className="game-container">
                 <div className="game-meta">
-                  <span>{attempts} attempts</span>
+                  <span>{attempts} {attempts === 1 ? 'attempt' : 'attempts'}</span>
+                  {!isCompleted && (
+                    <span className="zinc-text" style={{ fontSize: '13px' }}>
+                      potential link: <span style={{ color: potential.color, fontWeight: 'bold' }}>{potential.rank}</span> ({potential.score} pts)
+                    </span>
+                  )}
                   <button className="reset-button" onClick={resetGame}>
-                    reset grid
+                    reset game
                   </button>
                 </div>
 
                 {isCompleted ? (
                   /* Success terminal boot screen, prompts splitting action on enter */
-                  <div className="terminal-success">
+                  <div 
+                    className="terminal-success"
+                    style={{
+                      borderColor: `rgba(${rgb}, 0.25)`,
+                      boxShadow: `0 8px 32px rgba(0, 0, 0, 0.25), inset 0 0 20px rgba(${rgb}, 0.03)`
+                    }}
+                  >
                     <p className="terminal-line">&gt; match verification: successful</p>
-                    <p className="terminal-line">&gt; analyzing cognitive link patterns... matched</p>
-                    <p className="terminal-line">&gt; credentials verified: elizabeth_reider_expert_agent</p>
-                    <p className="terminal-line">&gt; core memory load: 100% (attempts: {attempts})</p>
-                    <p className="terminal-line">&gt; access status: granted</p>
+                    <p className="terminal-line">&gt; analyzing pattern linkage... completed in {attempts} {attempts === 1 ? 'attempt' : 'attempts'}</p>
+                    <p className="terminal-line" style={{ color: color }}>&gt; cognitive sync accuracy: {score}% {getProgressBar(score)}</p>
+                    <p className="terminal-line" style={{ color: color }}>&gt; link security rank: [{rank}] - {description}</p>
+                    
+                    <p className="terminal-line">&gt; access status: <span style={{ color: color, fontWeight: 'bold' }}>granted</span></p>
                     <div className="terminal-action">
                       <button 
                         className="enter-button" 
                         onClick={triggerAuthorization}
+                        style={{
+                          '--btn-color': color,
+                          '--btn-shadow': `rgba(${rgb}, 0.35)`,
+                          '--btn-hover-color': color,
+                          '--btn-hover-shadow': `rgba(${rgb}, 0.65)`,
+                          '--btn-hover-shadow-light': `rgba(${rgb}, 0.3)`
+                        } as React.CSSProperties}
                       >
                         [ enter workspace ]
                       </button>
