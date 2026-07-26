@@ -694,7 +694,7 @@ main {
 }
 
 .portfolio-hero {
-  padding-bottom: 48px;
+  padding-bottom: 18px;
 }
 
 .portfolio-hero p {
@@ -818,6 +818,78 @@ main {
   transform: scale(1) translateX(0);
 }
 
+/* =================================================================
+   Process Tabs (imagine / plan / direct / verify) — horizontal tabs
+   ================================================================= */
+
+.process-tab-nav {
+  position: relative;
+  display: flex;
+  gap: 22px;
+  margin-top: 18px;
+  border-bottom: 1px solid var(--zinc-200);
+  overflow-x: auto;
+}
+
+.process-tab-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 1px 12px 1px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--zinc-400);
+  font-size: 14.5px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.process-tab-btn svg {
+  opacity: 0.75;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.process-tab-btn:hover {
+  color: var(--foreground);
+}
+
+.process-tab-btn.active {
+  color: var(--foreground);
+}
+
+.process-tab-btn.active svg {
+  opacity: 1;
+  color: var(--accent-oklch);
+}
+
+.process-tab-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background-color: var(--accent-oklch);
+  border-radius: 2px;
+  transition: transform 0.32s cubic-bezier(0.65, 0, 0.35, 1), width 0.32s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.process-content-inner {
+  margin: 24px 0 8px 0;
+  animation: processFadeIn 0.35s ease-out;
+}
+
+.process-tagline {
+  color: var(--zinc-400);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+@keyframes processFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* TIMELINE STYLES (for About Page) */
 .timeline-section {
   margin-top: 64px;
@@ -851,15 +923,8 @@ main {
   background-color: #fafafa;
 }
 
-@media (min-width: 768px) {
-  .timeline-row:hover .row-hover-preview {
-    opacity: 1;
-    transform: translateY(-50%) scale(1);
-  }
-}
-
 .timeline-year {
-  min-width: 100px;
+  min-width: 120px;
   font-weight: 500;
   color: var(--zinc-400);
 }

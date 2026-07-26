@@ -1,23 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom'
 import { 
   Cpu, Brain, Bot, Sparkles, Database, Terminal, Layers, ShieldCheck, Network, RotateCcw 
 } from 'lucide-react'
 
-import imagineImg from './imagine.png'
-import planImg from './plan.png'
-import directImg from './direct-agents.png'
-import verifyImg from './verify.png'
-
 import balisafaritourImg from './balisafaritour.jpg'
 import robreidervoiceImg from './robreidervoice.jpg'
 import laconchitabeachImg from './laconchitabeach.jpg'
 
-import freelanceImg from './freelance.png'
-import crowdstrikeImg from './crowdstrike.png'
-import venablesBellImg from './venables-bell.png'
-import labjImg from './los-angeles-business-journal.png'
-import sbindyImg from './sbindy.png'
 
 /* =================================================----------------
    Types & Card Component Mapping
@@ -178,11 +168,131 @@ function ProjectRow({ id, title, description, link, href, hasPreview = true, pre
 }
 
 /* =================================================----------------
+   Process Tabs (imagine / plan / direct / verify) — vertical tab layout
+   ================================================================= */
+
+interface ProcessTab {
+  id: string
+  icon: React.ComponentType<{ size?: number; className?: string }>
+  label: string
+  tagline: string
+  blurb: string
+  bullets: { title: string; description: string }[]
+}
+
+const PROCESS_TABS: ProcessTab[] = [
+  {
+    id: 'imagine',
+    icon: Sparkles,
+    label: 'imagine',
+    tagline: 'where are we going?',
+    blurb: "every project starts with a question, not a tool. i sketch ideas fast — on paper, in figma, out loud — before any code gets written.",
+    bullets: [
+      { title: 'the spark', description: 'the idea still starts in a human brain — mine, or yours' },
+      { title: 'tools', description: "figma, adobe cc, and a whiteboard for the stuff that isn't pixel-perfect yet" },
+      { title: 'collaboration', description: "drafts get shared early — nothing sits in a folder waiting to be 'ready'" },
+    ],
+  },
+  {
+    id: 'plan',
+    icon: Layers,
+    label: 'plan',
+    tagline: 'what to pack?',
+    blurb: "once an idea feels real, i pressure-test it — including treating an AI model as a collaborator that interviews me about the thing, instead of just building it.",
+    bullets: [
+      { title: 'reverse prompting', description: 'instead of asking an agent to build the thing, i ask it to interview me about the thing — surfacing edge cases early' },
+      { title: 'agent interviews', description: 'structured back-and-forth with models turns a vague idea into a spec i can actually build from' },
+      { title: 'honest scope', description: "what ships first, what waits, and what's a nice-to-have — decided before it becomes a deadline problem" },
+    ],
+  },
+  {
+    id: 'direct',
+    icon: Bot,
+    label: 'direct',
+    tagline: 'bring an expert guide',
+    blurb: "this is where design becomes software. i write the code myself, and i direct a small team of AI agents to move faster — without losing the craft.",
+    bullets: [
+      { title: 'skills', description: 'html/css, react, typescript — plus enough python and automation to wire tools together' },
+      { title: 'models', description: 'i work across multiple LLMs and pick the right one for the job, instead of defaulting to one' },
+      { title: 'multiple agents', description: 'coding agents, design agents, QA agents — orchestrated, not left to run wild' },
+    ],
+  },
+  {
+    id: 'verify',
+    icon: ShieldCheck,
+    label: 'verify',
+    tagline: 'did everything work out',
+    blurb: "nothing ships until it's actually checked. verification isn't an afterthought here — it's the same instinct i sharpened working in security at crowdstrike.",
+    bullets: [
+      { title: 'tools', description: 'coderabbit and automated review catch what a fast build cycle misses' },
+      { title: 'real testing', description: 'cross-browser, mobile, and a human — me — clicking through it before it goes live' },
+    ],
+  },
+]
+
+function ProcessTabNav({ activeId, onSelect }: { activeId: string; onSelect: (id: string) => void }) {
+  const btnRefs = useRef<Record<string, HTMLButtonElement | null>>({})
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 })
+
+  useLayoutEffect(() => {
+    const measure = () => {
+      const btn = btnRefs.current[activeId]
+      if (btn) {
+        setIndicator({ left: btn.offsetLeft, width: btn.offsetWidth })
+      }
+    }
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [activeId])
+
+  return (
+    <div className="process-tab-nav">
+      {PROCESS_TABS.map(tab => (
+        <button
+          key={tab.id}
+          ref={el => { btnRefs.current[tab.id] = el }}
+          className={`process-tab-btn ${tab.id === activeId ? 'active' : ''}`}
+          onClick={() => onSelect(tab.id)}
+        >
+          <tab.icon size={14} />
+          <span>{tab.label}</span>
+        </button>
+      ))}
+      <span
+        className="process-tab-indicator"
+        style={{ transform: `translateX(${indicator.left}px)`, width: `${indicator.width}px` }}
+      />
+    </div>
+  )
+}
+
+function ProcessTabContent({ tab }: { tab: ProcessTab }) {
+  return (
+    <div key={tab.id} className="process-content-inner">
+      <p className="process-tagline">{tab.tagline}</p>
+      <p className="row-desc" style={{ color: '#000000', fontSize: '16px', margin: '0 0 20px 0' }}>{tab.blurb}</p>
+      {tab.bullets.map((bullet, idx) => (
+        <BulletItem key={idx} title={bullet.title} description={bullet.description} />
+      ))}
+      <div style={{ margin: '28px 0 0 0' }}>
+        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
+          contact me
+        </a>
+      </div>
+    </div>
+  )
+}
+
+/* =================================================----------------
    REVEALED PAGES (From er-director-3)
    ================================================================= */
 
 // 1. Portfolio Home List
 function PortfolioHome() {
+  const [activeTabId, setActiveTabId] = useState(PROCESS_TABS[0].id)
+  const activeTab = PROCESS_TABS.find(tab => tab.id === activeTabId) ?? PROCESS_TABS[0]
+
   return (
     <div className="flex-1 flex flex-col gap-4">
       {/* Hero Intro */}
@@ -190,26 +300,21 @@ function PortfolioHome() {
         <div>
           <h1 style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em' }}>hello, i'm elizabeth.</h1>
           <p className="mt-15 zinc-text">creative technologist &amp; web developer — i pair design instincts with AI-augmented engineering.</p>
-          <p className="mt-5 zinc-text">i imagine. i plan. i direct. i verify.</p>
+          <ProcessTabNav activeId={activeTabId} onSelect={setActiveTabId} />
         </div>
       </div>
 
-      {/* Process list */}
-      <div className="projects-divider">
-        <ProjectRow id={1} title="imagine" description="where are we going?" link="/imagine" previewImage={imagineImg} />
-        <ProjectRow id={2} title="plan" description="what to pack?" link="/plan" previewImage={planImg} />
-        <ProjectRow id={3} title="direct" description="bring an expert guide" link="/direct" previewImage={directImg} />
-        <ProjectRow id={4} title="verify" description="did everything work out" link="/verify" previewImage={verifyImg} />
-      </div>
+      {/* Process tab content */}
+      <ProcessTabContent tab={activeTab} />
 
       {/* Selected freelance work */}
       <section className="timeline-section">
-        <h2 className="timeline-title">selected work</h2>
+        <h2 className="timeline-title">this week</h2>
         <div className="projects-divider">
           <ProjectRow
             id={5}
             title="balisafaritour.com"
-            description="marketing + booking site for a bali tour operator — next.js, WhatsApp-based inquiries, built for conversion"
+            description="marketing + booking site for a bali tour operator — next.js, WhatsApp-based inquiries, built for conversion... you should come to Bali to experience it!"
             href="https://balisafaritour.com"
             previewImage={balisafaritourImg}
           />
@@ -273,13 +378,13 @@ function About() {
         <h2 className="timeline-title">experience</h2>
         <div className="timeline-list">
           {[
-            { year: '2021 — now', company: 'ereider', role: 'Freelance Web Development', link: 'https://elizabethreider.com', previewImage: freelanceImg },
-            { year: '2014 — 2020', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com', previewImage: crowdstrikeImg },
+            { year: '2021 — now', company: 'ereider', role: 'Freelance Web Development', link: 'https://elizabethreider.com' },
+            { year: '2014 — 2020', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
             { year: '2011 — 2014', company: 'Yardi Systems', role: 'Web / UI Design', link: 'https://www.yardi.com' },
             { year: '2010 — 2011', company: 'Bonqo.com', role: 'Front-End / Web Design' },
-            { year: '2009 — 2010', company: 'Venables Bell & Partners', role: 'Interactive Designer', link: 'https://www.venablesbell.com', previewImage: venablesBellImg },
-            { year: '2007 — 2009', company: 'Los Angeles Business Journal', role: 'Production Associate', link: 'https://labusinessjournal.com', previewImage: labjImg },
-            { year: '2005 — 2007', company: 'Santa Barbara Independent', role: 'Ad Production Designer', link: 'https://www.independent.com', previewImage: sbindyImg },
+            { year: '2009 — 2010', company: 'Venables Bell & Partners', role: 'Interactive Designer', link: 'https://www.venablesbell.com' },
+            { year: '2007 — 2009', company: 'Los Angeles Business Journal', role: 'Production Associate', link: 'https://labusinessjournal.com' },
+            { year: '2005 — 2007', company: 'Santa Barbara Independent', role: 'Ad Production Designer', link: 'https://www.independent.com' },
           ].map((exp, idx) => {
             const rowInner = (
               <>
@@ -288,11 +393,6 @@ function About() {
                   <span className="timeline-company">{exp.company}</span>
                   <span className="timeline-role">{exp.role}</span>
                 </div>
-                {exp.previewImage && (
-                  <div className="row-hover-preview">
-                    <img src={exp.previewImage} alt={exp.company} />
-                  </div>
-                )}
               </>
             )
             return exp.link ? (
@@ -312,114 +412,6 @@ function About() {
     </div>
   )
 }
-
-// 3. Imagine Page
-function Imagine() {
-  return (
-    <div className="w-full">
-
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>imagine</h3>
-
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        every project starts with a question, not a tool. i sketch ideas fast — on paper, in figma, out loud — before any code gets written.
-      </p>
-
-      <BulletItem title="the spark" description="the idea still starts in a human brain — mine, or yours" />
-
-      <BulletItem title="tools" description="figma, adobe cc, and a whiteboard for the stuff that isn't pixel-perfect yet" />
-
-      <BulletItem title="collaboration" description="drafts get shared early — nothing sits in a folder waiting to be 'ready'" />
-
-      
-      <div style={{ margin: '32px 0' }}>
-        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          contact me
-        </a>
-      </div>
-
-    </div>
-  )
-}
-
-
-
-function Plan() {
-  return (
-    <div className="w-full">
-
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>plan</h3>
-
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        once an idea feels real, i pressure-test it — including treating an AI model as a collaborator that interviews me about the thing, instead of just building it.
-      </p>
-
-      <BulletItem title="reverse prompting" description="instead of asking an agent to build the thing, i ask it to interview me about the thing — surfacing edge cases early" />
-      <BulletItem title="agent interviews" description="structured back-and-forth with models turns a vague idea into a spec i can actually build from" />
-      <BulletItem title="honest scope" description="what ships first, what waits, and what's a nice-to-have — decided before it becomes a deadline problem" />
-
-
-      <div style={{ margin: '32px 0' }}>
-        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          contact me
-        </a>
-      </div>
-
-    </div>
-  )
-}
-
-function Direct() {
-  return (
-  <div className="w-full">
-
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>direct</h3>
-
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this is where design becomes software. i write the code myself, and i direct a small team of AI agents to move faster — without losing the craft.
-      </p>
-
-      <BulletItem title="skills" description="html/css, react, typescript — plus enough python and automation to wire tools together" />
-      <BulletItem title="models" description="i work across multiple LLMs and pick the right one for the job, instead of defaulting to one" />
-      <BulletItem title="multiple agents" description="coding agents, design agents, QA agents — orchestrated, not left to run wild" />
-
-      
-      <div style={{ margin: '32px 0' }}>
-        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          contact me
-        </a>
-      </div>
-
-    </div>
-  )
-}
-
-
-
-function Verify() {
-  return (
-  <div className="w-full">
-
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>verify</h3>
-
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        nothing ships until it's actually checked. verification isn't an afterthought here — it's the same instinct i sharpened working in security at crowdstrike.
-      </p>
-
-      <BulletItem title="tools" description="coderabbit and automated review catch what a fast build cycle misses" />
-      <BulletItem title="real testing" description="cross-browser, mobile, and a human — me — clicking through it before it goes live" />
-
-      <div style={{ margin: '32px 0' }}>
-        <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
-          contact me
-        </a>
-      </div>
-
-    </div>
-  )
-}
-
-
-
 
 
 /* =================================================----------------
@@ -686,10 +678,6 @@ export default function App() {
           <Routes>
             <Route path="/" element={<PortfolioHome />} />
             <Route path="/about" element={<About />} />
-            <Route path="/imagine" element={<Imagine />} />
-            <Route path="/plan" element={<Plan />} />
-            <Route path="/direct" element={<Direct />} />
-            <Route path="/verify" element={<Verify />} />
           </Routes>
         </PortfolioLayout>
       </div>
