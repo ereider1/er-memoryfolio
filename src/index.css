@@ -919,9 +919,11 @@ main {
   position: relative;
 }
 
+/*
 .timeline-row:hover {
   background-color: #fafafa;
 }
+  */
 
 .timeline-year {
   min-width: 120px;

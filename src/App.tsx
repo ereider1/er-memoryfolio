@@ -378,13 +378,13 @@ function About() {
         <h2 className="timeline-title">experience</h2>
         <div className="timeline-list">
           {[
-            { year: '2021 — now', company: 'ereider', role: 'Freelance Web Development', link: 'https://elizabethreider.com' },
-            { year: '2014 — 2020', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
-            { year: '2011 — 2014', company: 'Yardi Systems', role: 'Web / UI Design', link: 'https://www.yardi.com' },
+            { year: '2021 — now', company: 'ereider', role: 'Freelance Web Development' },
+            { year: '2014 — 2020', company: 'CrowdStrike', role: 'Senior Web Developer' },
+            { year: '2011 — 2014', company: 'Yardi Systems', role: 'Web / UI Design' },
             { year: '2010 — 2011', company: 'Bonqo.com', role: 'Front-End / Web Design' },
-            { year: '2009 — 2010', company: 'Venables Bell & Partners', role: 'Interactive Designer', link: 'https://www.venablesbell.com' },
-            { year: '2007 — 2009', company: 'Los Angeles Business Journal', role: 'Production Associate', link: 'https://labusinessjournal.com' },
-            { year: '2005 — 2007', company: 'Santa Barbara Independent', role: 'Ad Production Designer', link: 'https://www.independent.com' },
+            { year: '2009 — 2010', company: 'Venables Bell & Partners', role: 'Interactive Designer' },
+            { year: '2007 — 2009', company: 'Los Angeles Business Journal', role: 'Production Associate' },
+            { year: '2005 — 2007', company: 'Santa Barbara Independent', role: 'Ad Production Designer' },
           ].map((exp, idx) => {
             const rowInner = (
               <>
@@ -395,11 +395,7 @@ function About() {
                 </div>
               </>
             )
-            return exp.link ? (
-              <a key={idx} href={exp.link} target="_blank" rel="noopener noreferrer" className="timeline-row">
-                {rowInner}
-              </a>
-            ) : (
+            return (
               <div key={idx} className="timeline-row cursor-default">
                 {rowInner}
               </div>
