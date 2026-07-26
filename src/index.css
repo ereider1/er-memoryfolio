@@ -32,8 +32,18 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-transform: lowercase; /* Universal aesthetic constraint */
-  user-select: none;
   overflow-x: hidden;
+}
+
+/* Selection is only disabled where it matters (game UI); everywhere else
+   (contact info, bio copy) visitors need to be able to select and copy text. */
+.gate-content-container {
+  user-select: none;
+}
+
+.revealed-portfolio,
+.terminal-success {
+  user-select: text;
 }
 
 /* =================================================================
@@ -49,7 +59,7 @@ header {
   background-color: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-b: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .header-container {
@@ -113,6 +123,22 @@ main {
   display: block;
 }
 
+.skip-link {
+  margin-top: 12px;
+  display: inline-block;
+  font-size: 13px;
+  color: var(--zinc-400);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--zinc-300);
+  padding-bottom: 1px;
+  width: fit-content;
+  transition: color 0.15s ease;
+}
+
+.skip-link:hover {
+  color: var(--foreground);
+}
+
 /* =================================================================
    Memory Game Grid & Cards (3D Flips)
    ================================================================= */
@@ -130,7 +156,7 @@ main {
   font-size: 14px;
   font-weight: 500;
   color: var(--zinc-400);
-  border-b: 1px solid var(--zinc-100);
+  border-bottom: 1px solid var(--zinc-100);
   padding-bottom: 12px;
 }
 
@@ -818,10 +844,18 @@ main {
   color: inherit;
   transition: background-color 0.15s ease;
   border-radius: 4px;
+  position: relative;
 }
 
 .timeline-row:hover {
   background-color: #fafafa;
+}
+
+@media (min-width: 768px) {
+  .timeline-row:hover .row-hover-preview {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
 }
 
 .timeline-year {

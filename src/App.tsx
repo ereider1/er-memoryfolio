@@ -9,6 +9,16 @@ import planImg from './plan.png'
 import directImg from './direct-agents.png'
 import verifyImg from './verify.png'
 
+import balisafaritourImg from './balisafaritour.jpg'
+import robreidervoiceImg from './robreidervoice.jpg'
+import laconchitabeachImg from './laconchitabeach.jpg'
+
+import freelanceImg from './freelance.png'
+import crowdstrikeImg from './crowdstrike.png'
+import venablesBellImg from './venables-bell.png'
+import labjImg from './los-angeles-business-journal.png'
+import sbindyImg from './sbindy.png'
+
 /* =================================================----------------
    Types & Card Component Mapping
    ================================================================= */
@@ -115,19 +125,6 @@ function BulletItem({ title, description }: { title: string; description: string
 }
 
 
-function VideoPlaceholder({ label }: { label: string }) {
-  return (
-    <div className="relative w-full aspect-[16/10] bg-zinc-50 border border-zinc-200 rounded-[4px] flex flex-col items-center justify-center text-zinc-400 my-8 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(240,240,240,0.5)_0%,transparent_100%)]" />
-      <span className="font-sans font-medium text-[15px] tracking-wide relative z-10 text-zinc-500">{label}</span>
-      <span className="text-[11px] text-zinc-400 mt-1 relative z-10"> - - -</span>
-    </div>
-  )
-}
-
-
-
-
 /* =================================================----------------
    revealed list project row (including hover placeholder images)
    ================================================================= */
@@ -137,17 +134,18 @@ interface ProjectRowProps {
   title: string
   description: string
   link?: string
+  href?: string
   hasPreview?: boolean
   previewImage?: string
 }
 
-function ProjectRow({ id, title, description, link, hasPreview = true, previewImage }: ProjectRowProps) {
+function ProjectRow({ id, title, description, link, href, hasPreview = true, previewImage }: ProjectRowProps) {
   const rowContent = (
     <>
       <span className="row-dot" />
       <div className="row-title-bar">
         <span>{title}</span>
-        {link && <span className="row-arrow">↗</span>}
+        {(link || href) && <span className="row-arrow">↗</span>}
       </div>
       <span className="row-desc">{description}</span>
 
@@ -166,6 +164,10 @@ function ProjectRow({ id, title, description, link, hasPreview = true, previewIm
         <Link to={link} className="row-link">
           {rowContent}
         </Link>
+      ) : href ? (
+        <a href={href} target="_blank" rel="noopener noreferrer" className="row-link">
+          {rowContent}
+        </a>
       ) : (
         <div className="row-link cursor-default">
           {rowContent}
@@ -186,11 +188,9 @@ function PortfolioHome() {
       {/* Hero Intro */}
       <div className="portfolio-hero">
         <div>
-          <span>hello, i'm elizabeth.</span>
-          <br />
-          <p className="mt-15 zinc-text">i like creating spaces for ideas to grow.</p>
-          <p className="mt-5 zinc-text">I imagine. I direct. I verify.</p>
-           
+          <h1 style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em' }}>hello, i'm elizabeth.</h1>
+          <p className="mt-15 zinc-text">creative technologist &amp; web developer — i pair design instincts with AI-augmented engineering.</p>
+          <p className="mt-5 zinc-text">i imagine. i plan. i direct. i verify.</p>
         </div>
       </div>
 
@@ -201,6 +201,34 @@ function PortfolioHome() {
         <ProjectRow id={3} title="direct" description="bring an expert guide" link="/direct" previewImage={directImg} />
         <ProjectRow id={4} title="verify" description="did everything work out" link="/verify" previewImage={verifyImg} />
       </div>
+
+      {/* Selected freelance work */}
+      <section className="timeline-section">
+        <h2 className="timeline-title">selected work</h2>
+        <div className="projects-divider">
+          <ProjectRow
+            id={5}
+            title="balisafaritour.com"
+            description="marketing + booking site for a bali tour operator — next.js, WhatsApp-based inquiries, built for conversion"
+            href="https://balisafaritour.com"
+            previewImage={balisafaritourImg}
+          />
+          <ProjectRow
+            id={6}
+            title="robreidervoice.com"
+            description="portfolio + demo reel site for an emmy-winning voice actor — audio-forward design built to book auditions"
+            href="https://robreidervoice.com"
+            previewImage={robreidervoiceImg}
+          />
+          <ProjectRow
+            id={7}
+            title="laconchitabeach.com"
+            description="resident portal for a coastal community — login, directory, docs, and live tide/surf conditions"
+            href="https://laconchitabeach.com"
+            previewImage={laconchitabeachImg}
+          />
+        </div>
+      </section>
 
     </div>
   )
@@ -215,29 +243,28 @@ function About() {
           <span className="text-[11px] text-zinc-400 mt-1">Hello</span>
         </div>
 
-        <p className="max-w-[340px] text-zinc-800 leading-[1.6] space-y-6">
-         i'm elizabeth.
-          <br />
-          <br />
-Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
-
-Since I am a self-taught web developer, I have had a long curvy road of experience. I started with a bachelor of Fine Arts (painting- no Vango here). Learned fast paced print production graphic design at the Santa Barbara Independent, then animation at Venables Bell, then web design and development at CrowdStrike. 
-
-Of course there were many fun side projects in between (where I learned to build and break things)
-
-Now I use AI to automate tasks and create and explore
-<br />
-<br />
-When I'm not at my computer, I am on the beach with my dogs, or pretending I have a green thumb.
-
-          <br /><br />
-        contact me
-          <br />
-        </p>
+        <div className="max-w-[340px] text-zinc-800 leading-[1.6]" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <p>i'm elizabeth.</p>
+          <p>
+            being creative is fun. knowing how to get your thoughts "on the page" requires tools —
+            i know how to use a lot of them.
+          </p>
+          <p>
+            i'm a self-taught web developer with a long, curvy road behind me. i started with a
+            bachelor of fine arts (painting — no van gogh here), then learned fast-paced print
+            production at the santa barbara independent, animation at venables bell, and web
+            design and development at crowdstrike.
+          </p>
+          <p>there were plenty of side projects along the way — that's where i learned to build and break things.</p>
+          <p>now i use AI to automate tasks, and to create and explore faster than i could alone.</p>
+          <p>when i'm not at my computer, i'm on the beach with my dogs, or pretending i have a green thumb.</p>
+          <p>contact me —</p>
+        </div>
 
         <div className="flex flex-col gap-1.5 pt-4 text-[16px]">
           <a id="about-email" href="mailto:reiderea@gmail.com" className="row-title-bar w-fit">reiderea@gmail.com</a>
           <a href="https://www.linkedin.com/in/elizabeth-reider/" target="_blank" rel="noopener noreferrer" className="row-desc w-fit">linkedin</a>
+          <a href="/elizabeth-reider-resume.pdf" target="_blank" rel="noopener noreferrer" className="row-desc w-fit">resume (pdf)</a>
         </div>
       </section>
 
@@ -246,21 +273,38 @@ When I'm not at my computer, I am on the beach with my dogs, or pretending I hav
         <h2 className="timeline-title">experience</h2>
         <div className="timeline-list">
           {[
-            { year: 'now', company: 'ereider', role: 'Freelance', link: 'https://elizabethreider.com' },
-            { year: '2019', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com' },
-            { year: '2015', company: 'Venables Bell & Partners', role: 'Digital Animation & Production', link: 'https://www.venablesbell.com' },
-            { year: '2012', company: 'Los Angeles Business Journal', role: 'Print Design & Production', link: 'https://www.crowdstrike.com' },
-            { year: '2010', company: 'Santa Barbara Independent', role: 'Ad Design & Production', link: 'https://www.independent.com' },
-            
-          ].map((exp, idx) => (
-            <a key={idx} href={exp.link} target="_blank" rel="noopener noreferrer" className="timeline-row">
-              <span className="timeline-year">{exp.year}</span>
-              <div className="timeline-details">
-                <span className="timeline-company">{exp.company}</span>
-                <span className="timeline-role">{exp.role}</span>
+            { year: '2021 — now', company: 'ereider', role: 'Freelance Web Development', link: 'https://elizabethreider.com', previewImage: freelanceImg },
+            { year: '2014 — 2020', company: 'CrowdStrike', role: 'Senior Web Developer', link: 'https://www.crowdstrike.com', previewImage: crowdstrikeImg },
+            { year: '2011 — 2014', company: 'Yardi Systems', role: 'Web / UI Design', link: 'https://www.yardi.com' },
+            { year: '2010 — 2011', company: 'Bonqo.com', role: 'Front-End / Web Design' },
+            { year: '2009 — 2010', company: 'Venables Bell & Partners', role: 'Interactive Designer', link: 'https://www.venablesbell.com', previewImage: venablesBellImg },
+            { year: '2007 — 2009', company: 'Los Angeles Business Journal', role: 'Production Associate', link: 'https://labusinessjournal.com', previewImage: labjImg },
+            { year: '2005 — 2007', company: 'Santa Barbara Independent', role: 'Ad Production Designer', link: 'https://www.independent.com', previewImage: sbindyImg },
+          ].map((exp, idx) => {
+            const rowInner = (
+              <>
+                <span className="timeline-year">{exp.year}</span>
+                <div className="timeline-details">
+                  <span className="timeline-company">{exp.company}</span>
+                  <span className="timeline-role">{exp.role}</span>
+                </div>
+                {exp.previewImage && (
+                  <div className="row-hover-preview">
+                    <img src={exp.previewImage} alt={exp.company} />
+                  </div>
+                )}
+              </>
+            )
+            return exp.link ? (
+              <a key={idx} href={exp.link} target="_blank" rel="noopener noreferrer" className="timeline-row">
+                {rowInner}
+              </a>
+            ) : (
+              <div key={idx} className="timeline-row cursor-default">
+                {rowInner}
               </div>
-            </a>
-          ))}
+            )
+          })}
         </div>
       </section>
 
@@ -273,23 +317,18 @@ When I'm not at my computer, I am on the beach with my dogs, or pretending I hav
 function Imagine() {
   return (
     <div className="w-full">
-      <VideoPlaceholder label="imagine " />
 
       <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>imagine</h3>
 
-      <BulletItem title="generate & edit" description="manually edit generated content without losing context." />
-      <BulletItem title="highlight & improve" description="reference any section to condense, expand, or refine—while maintaining control over the final result." />
-      <BulletItem title="reverse prompting" description="agent needs to adapt to you." />
-
-
-
-     <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        Being creative is fun. Knowing how to get your thoughts “on the page” requires the use of tools. I know how to use a lot of them. 
+      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
+        every project starts with a question, not a tool. i sketch ideas fast — on paper, in figma, out loud — before any code gets written.
       </p>
 
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '24px 0 32px 0' }}>
-        these tools help speed up the creation stage and therefore collaboration starts at the beginning.
-      </p>
+      <BulletItem title="the spark" description="the idea still starts in a human brain — mine, or yours" />
+
+      <BulletItem title="tools" description="figma, adobe cc, and a whiteboard for the stuff that isn't pixel-perfect yet" />
+
+      <BulletItem title="collaboration" description="drafts get shared early — nothing sits in a folder waiting to be 'ready'" />
 
       
       <div style={{ margin: '32px 0' }}>
@@ -302,93 +341,79 @@ function Imagine() {
   )
 }
 
+
+
 function Plan() {
   return (
     <div className="w-full">
+
+      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>plan</h3>
+
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        natural language is ambiguous—it contains hidden implications, assumptions, and layers of intent. the slightest ambiguity in prompts can mislead ai, while too much detail can confuse models.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this prototype helps users identify ambiguity and create precise prompts by making implicit language explicit.
+        once an idea feels real, i pressure-test it — including treating an AI model as a collaborator that interviews me about the thing, instead of just building it.
       </p>
 
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>how it works</h3>
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>1. start with a rough prompt</span>
-      <VideoPlaceholder label="rough prompt input analysis" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>2. analyze interpretations</span>
-      <VideoPlaceholder label="interpretation analysis mapping" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>3. align your intent</span>
-      <VideoPlaceholder label="user intent alignment workspace" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>4. iterate</span>
-      <VideoPlaceholder label="iterative feedback session" />
+      <BulletItem title="reverse prompting" description="instead of asking an agent to build the thing, i ask it to interview me about the thing — surfacing edge cases early" />
+      <BulletItem title="agent interviews" description="structured back-and-forth with models turns a vague idea into a spec i can actually build from" />
+      <BulletItem title="honest scope" description="what ships first, what waits, and what's a nice-to-have — decided before it becomes a deadline problem" />
+
 
       <div style={{ margin: '32px 0' }}>
         <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
           contact me
         </a>
       </div>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        future tools will evolve prompting from trial-and-error to interactive refinement, where ai doesn't let users do all the heavy lifting, but helps them co-create.
-      </p>
+
     </div>
   )
 }
 
 function Direct() {
   return (
-    <div className="w-full">
+  <div className="w-full">
+
+      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>direct</h3>
+
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        prompting llms falls into two extremes: at one end is "vibe prompting," which relies on intuition and trial and error until something feels right. at the other end are advanced tools that require deep technical expertise and follow rigid, linear processes that slow iteration. without a structured way to test, compare, and refine, results remain inconsistent—especially at scale.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this prototype brings systematic evaluation to prompt engineering, making model behavior predictable and adaptable.
+        this is where design becomes software. i write the code myself, and i direct a small team of AI agents to move faster — without losing the craft.
       </p>
 
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>how it works</h3>
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>1. compare prompts side by side</span>
-      <VideoPlaceholder label="side-by-side prompt comparison tool" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>2. generate & annotate eval sets</span>
-      <VideoPlaceholder label="evaluation set annotation interface" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>3. refine iteratively</span>
-      <VideoPlaceholder label="iterative refinement console" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>4. optimize automatically</span>
-      <VideoPlaceholder label="automated optimizer feedback loop" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>5. know when to fine-tune</span>
+      <BulletItem title="skills" description="html/css, react, typescript — plus enough python and automation to wire tools together" />
+      <BulletItem title="models" description="i work across multiple LLMs and pick the right one for the job, instead of defaulting to one" />
+      <BulletItem title="multiple agents" description="coding agents, design agents, QA agents — orchestrated, not left to run wild" />
 
+      
       <div style={{ margin: '32px 0' }}>
         <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
           contact me
         </a>
       </div>
+
     </div>
   )
 }
 
+
+
 function Verify() {
   return (
-    <div className="w-full">
+  <div className="w-full">
+
+      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>verify</h3>
+
       <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        we can envision futures in basic terms: a new technology emerges, policies shift, daily life changes. but mapping second- and third-order effects is a cognitive challenge.
-      </p>
-      <p className="row-desc" style={{ color: '#000000', fontSize: '17px', margin: '16px 0' }}>
-        this prototype systematically extrapolates wave after wave of consequences, helping users see how futures unfold step by step.
+        nothing ships until it's actually checked. verification isn't an afterthought here — it's the same instinct i sharpened working in security at crowdstrike.
       </p>
 
-      <h3 className="bullet-title" style={{ fontSize: '21px', margin: '32px 0 16px 0' }}>how it works</h3>
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>1. enter a scenario</span>
-      <VideoPlaceholder label="scenario entry interface" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>2. cascading insights</span>
-      <VideoPlaceholder label="cascading visual insights graph" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>3. image generation</span>
-      <VideoPlaceholder label="automated scenario image generator" />
-      <span className="row-desc" style={{ fontSize: '15px', fontWeight: 600 }}>4. audio snapshots</span>
-      <VideoPlaceholder label="procedural audio snapshot dashboard" />
+      <BulletItem title="tools" description="coderabbit and automated review catch what a fast build cycle misses" />
+      <BulletItem title="real testing" description="cross-browser, mobile, and a human — me — clicking through it before it goes live" />
 
       <div style={{ margin: '32px 0' }}>
         <a href="mailto:reiderea@gmail.com" target="_blank" rel="noopener noreferrer" className="enter-button" style={{ background: '#a1a1aa', color: 'white', textDecoration: 'none', display: 'inline-block' }}>
           contact me
         </a>
       </div>
+
     </div>
   )
 }
@@ -721,9 +746,26 @@ export default function App() {
                 <p className="intro-text">
                   <span>hello, i'm elizabeth.</span>
                   <span className="muted">
-                    I like creating spaces for ideas to grow.
+                    i like creating spaces for ideas to grow. play a quick memory game to get in —
+                    or skip straight to the portfolio.
                   </span>
                 </p>
+                <a
+                  href="/"
+                  className="skip-link"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    console.log(`[Skip Link] "skip game" clicked. Starting split gates...`)
+                    setIsSplitting(true)
+                    setTimeout(() => {
+                      navigate('/')
+                      setIsAuthorized(true)
+                      setIsFullyOpen(true)
+                    }, 1200)
+                  }}
+                >
+                  [ skip game → view portfolio ]
+                </a>
               </section>
 
               {/* Memory Matching Game board */}
