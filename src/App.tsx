@@ -710,7 +710,7 @@ export default function App() {
                   className="reset-button" 
                   onClick={(e) => {
                     e.preventDefault()
-                    console.log(`[Header Nav] "about" clicked from gateway screen. Starting split gates...`)
+                    console.log(`[Header Nav] "about me" clicked from gateway screen. Starting split gates...`)
                     setIsSplitting(true)
                     setTimeout(() => {
                       console.log(`[Header Nav] Doors split complete! Revealing "about" workspace...`)
@@ -721,7 +721,7 @@ export default function App() {
                   }}
                   style={{ color: '#ef4444', borderBottom: '1px dashed rgba(239,68,68,0.25)', paddingBottom: '2px', textDecoration: 'none' }}
                 >
-                  [ about ]
+                  [ about me ]
                 </Link>
               </div>
             </header>
