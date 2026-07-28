@@ -300,12 +300,8 @@ function PortfolioHome() {
         <div>
           <h1 style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em' }}>hello, i'm elizabeth.</h1>
           <p className="mt-15 zinc-text">creative technologist &amp; web developer — i pair design instincts with AI-augmented engineering.</p>
-          <ProcessTabNav activeId={activeTabId} onSelect={setActiveTabId} />
         </div>
       </div>
-
-      {/* Process tab content */}
-      <ProcessTabContent tab={activeTab} />
 
       {/* Selected freelance work */}
       <section className="timeline-section">
@@ -333,6 +329,12 @@ function PortfolioHome() {
             previewImage={laconchitabeachImg}
           />
         </div>
+      </section>
+
+      {/* Process Tabs */}
+      <section className="timeline-section">
+        <ProcessTabNav activeId={activeTabId} onSelect={setActiveTabId} />
+        <ProcessTabContent tab={activeTab} />
       </section>
 
     </div>
@@ -411,60 +413,38 @@ function About() {
 
 
 /* =================================================----------------
-   Scoring and Progress-Bar Helpers
+   Percentile Helpers
    ================================================================= */
 
-function calculateScore(attempts: number, seconds: number) {
-  const flips = attempts * 2
-  // Score = 100 - (Flips - 4) * 10 - (Seconds * 0.5)
-  // Capped between 10 and 100
-  const rawScore = 100 - (flips - 4) * 10 - seconds * 0.5
-  const score = Math.max(10, Math.min(100, Math.round(rawScore)))
+// Baseline used to compare each run against the expected average.
+const EXPECTED_AVERAGE_FLIPS = 6
+const EXPECTED_AVERAGE_SECONDS = 12
 
-  let rank = '*'
-  let description = 'you got lucky'
-  let color = '#22c55e' // terminal green
-  let rgb = '34, 197, 94'
-
-  if (score >= 90) {
-    rank = '*'
-    description = 'you got lucky'
-    color = '#22c55e'
-    rgb = '34, 197, 94'
-  } else if (score >= 75) {
-    rank = 'A'
-    description = 'exceptional neural clarity'
-    color = '#3b82f6' // blue
-    rgb = '59, 130, 246'
-  } else if (score >= 60) {
-    rank = 'B'
-    description = 'stable cognitive alignment'
-    color = '#a855f7' // purple
-    rgb = '168, 85, 247'
-  } else if (score >= 45) {
-    rank = 'C'
-    description = 'standard link authorized'
-    color = '#eab308' // yellow
-    rgb = '234, 179, 8'
-  } else if (score >= 30) {
-    rank = 'D'
-    description = 're-routed memory backup'
-    color = '#f97316' // orange
-    rgb = '249, 115, 22'
-  } else {
-    rank = 'F'
-    description = 'degraded / high-noise link'
-    color = '#ef4444' // red
-    rgb = '239, 68, 68'
+function calculatePercentile(flips: number, seconds: number) {
+  if (flips === 0) {
+    return { percentile: 0, label: 'Keep Trying', color: '#ef4444', rgb: '239, 68, 68' }
   }
 
-  return { score, rank, description, color, rgb }
-}
+  // Weight flips and time evenly around the expected average (50th percentile).
+  const flipPerformance = EXPECTED_AVERAGE_FLIPS / flips
+  const timePerformance = seconds > 0 ? EXPECTED_AVERAGE_SECONDS / seconds : 1
+  const percentile = Math.max(0, Math.min(100, Math.round(
+    50 + ((flipPerformance - 1) * 25) + ((timePerformance - 1) * 25)
+  )))
 
-function getProgressBar(score: number) {
-  const totalBlocks = 10
-  const filledBlocks = Math.round((score / 100) * totalBlocks)
-  return '■'.repeat(filledBlocks) + '□'.repeat(totalBlocks - filledBlocks)
+  if (percentile >= 90) {
+    return { percentile, label: 'Memory Master', color: '#22c55e', rgb: '34, 197, 94' }
+  }
+  if (percentile >= 70) {
+    return { percentile, label: 'Sharp', color: '#3b82f6', rgb: '59, 130, 246' }
+  }
+  if (percentile >= 50) {
+    return { percentile, label: 'Good', color: '#a855f7', rgb: '168, 85, 247' }
+  }
+  if (percentile >= 30) {
+    return { percentile, label: 'Lucky', color: '#eab308', rgb: '234, 179, 8' }
+  }
+  return { percentile, label: 'Keep Trying', color: '#ef4444', rgb: '239, 68, 68' }
 }
 
 /* =================================================----------------
@@ -481,7 +461,7 @@ export default function App() {
   const [firstCard, setFirstCard] = useState<Card | null>(null)
   const [, setSecondCard] = useState<Card | null>(null)
   const [isLocked, setIsLocked] = useState(false)
-  const [attempts, setAttempts] = useState(0)
+  const [flips, setFlips] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
 
   // Gate splitting transitions
@@ -508,8 +488,8 @@ export default function App() {
     }
   }, [timerActive])
 
-  const { score, rank, description, color, rgb } = calculateScore(attempts, seconds)
-  const potential = calculateScore(attempts + 1, seconds)
+  const { percentile, label, color, rgb } = calculatePercentile(flips, seconds)
+  const potential = calculatePercentile(flips + 1, seconds)
 
   // Initialize matching game
   const resetGame = () => {
@@ -527,7 +507,7 @@ export default function App() {
     setFirstCard(null)
     setSecondCard(null)
     setIsLocked(false)
-    setAttempts(0)
+    setFlips(0)
     setIsCompleted(false)
     setSeconds(0)
     setTimerActive(false)
@@ -558,12 +538,12 @@ export default function App() {
       c.id === clickedCard.id ? { ...c, isFlipped: true } : c
     )
     setCards(updatedCards)
+    setFlips(prev => prev + 1)
 
     if (!firstCard) {
       setFirstCard(clickedCard)
     } else {
       setSecondCard(clickedCard)
-      setAttempts(prev => prev + 1)
       setIsLocked(true)
 
       const firstWasAlreadyRevealed = revealedCardIds.includes(firstCard.id)
@@ -729,36 +709,20 @@ export default function App() {
               <section className="intro-section">
                 <p className="intro-text">
                   <span>hello, i'm elizabeth.</span>
-                  <span className="muted">
-                    i like creating spaces for ideas to grow. play a quick memory game to get in —
-                    or skip straight to the portfolio.
-                  </span>
+                  <span className="muted">i like creating spaces for ideas to grow.</span>
+                  <span className="muted">memory is a great game, tool, and skill.</span>
                 </p>
-                <a
-                  href="/"
-                  className="skip-link"
-                  onClick={(e) => {
-                    e.preventDefault()
-                    console.log(`[Skip Link] "skip game" clicked. Starting split gates...`)
-                    setIsSplitting(true)
-                    setTimeout(() => {
-                      navigate('/')
-                      setIsAuthorized(true)
-                      setIsFullyOpen(true)
-                    }, 1200)
-                  }}
-                >
-                  [ skip game → view portfolio ]
-                </a>
+                
               </section>
+
 
               {/* Memory Matching Game board */}
               <section className="game-container">
                 <div className="game-meta">
-                  <span>{attempts} {attempts === 1 ? 'attempt' : 'attempts'}{seconds > 0 ? ` • ${seconds}s` : ''}</span>
+                  <span>{flips} {flips === 1 ? 'flip' : 'flips'}{seconds > 0 ? ` • ${seconds}s` : ''}</span>
                   {!isCompleted && (
                     <span className="zinc-text" style={{ fontSize: '13px' }}>
-                      potential link: <span style={{ color: potential.color, fontWeight: 'bold' }}>{potential.rank}</span> ({potential.score} pts)
+                      projected standing: <span style={{ color: potential.color, fontWeight: 'bold' }}>{potential.label}</span> ({potential.percentile}th percentile)
                     </span>
                   )}
                   <button className="reset-button" onClick={resetGame}>
@@ -776,13 +740,13 @@ export default function App() {
                     }}
                   >
                     <p className="terminal-line">&gt; match verification: successful</p>
-                    <p className="terminal-line">&gt; analyzing pattern linkage... completed in {seconds} seconds ({attempts * 2} flips / {attempts} attempts)</p>
-                    <p className="terminal-line" style={{ color: color }}>&gt; cognitive sync accuracy: {score}% {getProgressBar(score)}</p>
-                    <p className="terminal-line" style={{ color: color }}>&gt; link security rank: [{rank}] - {description}</p>
+                    <p className="terminal-line">&gt; analyzing pattern linkage... completed in {seconds} seconds ({flips} flips)</p>
+                    <p className="terminal-line" style={{ color: color }}>&gt; percentile standing: {percentile}th</p>
+                    <p className="terminal-line" style={{ color: color }}>&gt; memory classification: [{label}]</p>
 
                     <div style={{ margin: '16px 0', borderTop: '1px dashed rgba(113, 113, 122, 0.2)', paddingTop: '16px' }}>
                       <p className="terminal-line" style={{ color: '#71717a' }}>&gt; [ cognitive evaluation metrics ]</p>
-                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; flips to first match: {attempts * 2}</p>
+                      <p className="terminal-line" style={{ color: '#71717a' }}>&gt; flips to first match: {flips}</p>
                       <p className="terminal-line" style={{ color: '#71717a' }}>&gt; time to first match: {seconds}s</p>
                       <p className="terminal-line" style={{ color: '#71717a' }}>&gt; unique cards revealed: {revealedCardIds.length} / 16</p>
                       <p className="terminal-line" style={{ color: '#71717a' }}>&gt; repeated unnecessary flips: {repeatedUnnecessary ? 'detected (indicating high-noise memory pathway)' : 'none (indicating optimal memory path retention)'}</p>
