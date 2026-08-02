@@ -299,7 +299,7 @@ function PortfolioHome() {
       <div className="portfolio-hero">
         <div>
           <h1 style={{ fontSize: '17px', fontWeight: 500, letterSpacing: '-0.01em' }}>hello, i'm elizabeth.</h1>
-          <p className="mt-15 zinc-text">creative technologist &amp; web developer — i pair design instincts with AI-augmented engineering.</p>
+          <p className="mt-15 zinc-text">creative designer &amp; developer — i pair design instincts with AI-augmented engineering.</p>
         </div>
       </div>
 
@@ -712,7 +712,16 @@ export default function App() {
                   <span className="muted">i like creating spaces for ideas to grow.</span>
                   <span className="muted">memory is a great game, tool, and skill.</span>
                 </p>
-                
+                <a 
+                  href="#" 
+                  className="skip-link" 
+                  onClick={(e) => {
+                    e.preventDefault();
+                    triggerAuthorization();
+                  }}
+                >
+                  skip to portfolio
+                </a>
               </section>
 
 
