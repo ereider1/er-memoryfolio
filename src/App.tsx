@@ -370,10 +370,10 @@ function About() {
           <p>contact me —</p>
         </div>
 
-        <div className="flex flex-col gap-1.5 pt-4 text-[16px]">
-          <a id="about-email" href="mailto:reiderea@gmail.com" className="row-title-bar w-fit">reiderea@gmail.com</a>
-          <a href="https://www.linkedin.com/in/elizabeth-reider/" target="_blank" rel="noopener noreferrer" className="row-desc w-fit">linkedin</a>
-          <a href="/elizabeth-reider-resume.pdf" target="_blank" rel="noopener noreferrer" className="row-desc w-fit">resume (pdf)</a>
+        <div className="flex flex-col gap-1.5 pt-8 text-[16px]">
+          <p><a id="about-email" href="mailto:reiderea@gmail.com" className="row-title-bar w-fit">reiderea@gmail.com</a></p>
+          <p><a href="https://www.linkedin.com/in/elizabeth-reider/" target="_blank" rel="noopener noreferrer" className="row-title-bar w-fit">linkedin</a></p>
+          <p><a href="/elizabeth-reider-resume.pdf" target="_blank" rel="noopener noreferrer" className="row-title-bar w-fit">resume (pdf)</a></p>
         </div>
       </section>
 
