@@ -186,10 +186,12 @@ const PROCESS_TABS: ProcessTab[] = [
     icon: Sparkles,
     label: 'imagine',
     tagline: 'where are we going?',
-    blurb: "every project starts with a question, not a tool. i sketch ideas fast — on paper, in figma, out loud — before any code gets written.",
+    blurb: "every project starts with a question, not a tool. i sketch ideas fast — on paper, in figma, out loud — before any code gets written. AI can get anywhere fast- but you better know exactly where it is going before you give it the keys.",
     bullets: [
       { title: 'the spark', description: 'the idea still starts in a human brain — mine, or yours' },
-      { title: 'tools', description: "figma, adobe cc, and a whiteboard for the stuff that isn't pixel-perfect yet" },
+      { title: 'tools', description: 'VS Code, React, TypeScript, Tailwind CSS, Figma, Node.js, Git, Vercel, Code Rabbit' },
+      { title: 'AI', description: 'depending on the task: Claude, Codex, even Gemini sometimes.' },
+
       { title: 'collaboration', description: "drafts get shared early — nothing sits in a folder waiting to be 'ready'" },
     ],
   },
@@ -353,7 +355,7 @@ function About() {
         <div className="max-w-[340px] text-zinc-800 leading-[1.6]" style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <p>i'm elizabeth.</p>
           <p>
-            being creative is fun. knowing how to get your thoughts "on the page" requires tools —
+            Being creative is fun. Turning ideas into reality takes the right tools —
             i know how to use a lot of them.
           </p>
           <p>
